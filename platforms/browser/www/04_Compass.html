@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+    <style>
+        #div1{
+            width: 200px;height: 50px;
+            background: #399;
+        }
+        #img{width: 80px;height: 80px;}
+    </style>
+</head>
+<body>
+    <div id="box">
+        <input type="button" id="btn1" value="获取一次朝向">
+        <input type="button" id="btn2" value="开启实时指向">
+        <input type="button" id="btn3" value="关闭实时指向">
+        <div id="div1"></div>
+        <img src="http://img0.imgtn.bdimg.com/it/u=910616928,224172156&fm=26&gp=0.jpg" alt="" id="img">
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        var btn1 = document.querySelector('#btn1');
+        var btn2 = document.querySelector('#btn2');
+        var btn3 = document.querySelector('#btn3');
+        var div1 = document.querySelector('#div1');
+        var img = document.querySelector('#img');
+        var watchID = null;
+
+        // 获取一次朝向
+        btn1.onclick = function (){
+            function onSuccess(heading) {
+                alert('Heading: ' + heading.magneticHeading);
+            };
+            function onError(error) {
+                alert('CompassError: ' + error.code);
+            };
+            navigator.compass.getCurrentHeading(onSuccess, onError);
+        };
+
+        // 开启实时朝向
+        btn2.onclick = function (){
+            function onSuccess(heading) {
+                div1.innerHTML = 'Heading: ' + heading.magneticHeading;
+                img.style.webkitTransform = 'rotate(' + heading.magneticHeading + 'deg)'
+            };
+            function onError(compassError) {
+                alert('Compass error: ' + compassError.code);
+            };
+            
+            var options = { frequency: 1000 };      //每隔1秒更新一次 
+            watchID = navigator.compass.watchHeading(onSuccess, onError, options);
+        };
+
+        // 关闭实时朝向
+        btn3.onclick = function (){
+            navigator.compass.clearWatch(watchID);
+        };
+    </script>
+</body>
+</html>

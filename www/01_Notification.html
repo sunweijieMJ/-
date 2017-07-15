@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+<body>
+    <div id="box">
+        <input type="button" id="btn1" value="alert">
+        <input type="button" id="btn2" value="confirm">
+        <input type="button" id="btn3" value="beep">
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        var btn1 = document.querySelector('#btn1');
+        var btn2 = document.querySelector('#btn2');
+        var btn3 = document.querySelector('#btn3');
+
+        // 显示一个定制的警告或对话框
+        btn1.onclick = function (){
+            navigator.notification.alert('对话框信息', function (){
+                alert('确认了要去办的事');
+            }, '对话框标题', '按钮名称');
+        };
+
+        // 显示一个可定制的确认对话框
+        btn2.onclick = function (){
+            navigator.notification.confirm('对话框信息', function (){
+                alert('你选择的按钮索引: ' + button);
+            }, '对话框标题', '确认,取消');
+        };
+
+         // 设备将发出蜂鸣声
+        btn3.onclick = function (){
+            // 设备将发出3次蜂鸣
+            navigator.notification.beep(3);
+    </script> 
+</body>
+</html>

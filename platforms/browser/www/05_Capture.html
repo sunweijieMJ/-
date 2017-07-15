@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+<body>
+    <div id="box">
+        <input type="button" id="btn" value="录制">
+        <video src="" controls id="v1"></video>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        var btn = document.querySelector('#btn');
+        var oV = document.querySelector('#v1');
+
+        btn.onclick = function (){
+            // 限制采集上限为2个媒体文件，每个文件不超过10秒
+            var options = {
+                limit : 2,
+                duration : 10
+            };
+
+            // 采集操作成功完成后的回调函数
+            var captureSuccess = function(mediaFiles) { 
+                var i, path, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    path = mediaFiles[i].fullPath;  
+                    // 对文件进行感兴趣的操作
+                    oV.src = path;
+                } 
+            };  
+                
+            // 采集操作出错后的回调函数
+            var captureError = function(error) { 
+                navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error'); 
+            };  
+                
+            // 开始采集音频
+            navigator.device.capture.captureVideo(captureSuccess, captureError, options);
+        };
+    </script>
+</body>
+</html>
